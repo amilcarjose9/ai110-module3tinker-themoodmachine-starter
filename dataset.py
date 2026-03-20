@@ -23,6 +23,13 @@ POSITIVE_WORDS = [
     "chill",
     "relaxed",
     "amazing",
+    # --- NEW ADDITIONS ---
+    "best",
+    "hopeful",
+    "immaculate",
+    "🥳",
+    "🙌",
+    "✨"
 ]
 
 NEGATIVE_WORDS = [
@@ -36,6 +43,11 @@ NEGATIVE_WORDS = [
     "stressed",
     "hate",
     "boring",
+    # --- NEW ADDITIONS ---
+    "failing",
+    "crashes",
+    "💀",
+    "🙄"
 ]
 
 # ---------------------------------------------------------------------
