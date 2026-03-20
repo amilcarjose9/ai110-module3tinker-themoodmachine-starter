@@ -56,34 +56,35 @@ class MoodAnalyzer:
     # Scoring logic
     # ---------------------------------------------------------------------
 
-    def score_text(self, text: str) -> int:
+    def score_text(self, text: str) -> Tuple[int, int]:
         """
-        Compute a numeric "mood score" with an enhancement: Negation Handling.
-        If a word like "not" or "never" appears immediately before a mood word, 
-        it flips the score of that word.
+        Compute numeric mood scores.
+        
+        FIX: Now returns a tuple of (pos_score, neg_score) so mixed 
+        emotions don't cancel each other out to zero.
         """
         tokens = self.preprocess(text)
-        score = 0
+        pos_score = 0
+        neg_score = 0
         
         # Simple set of negation markers
         negation_words = {"not", "no", "never", "none", "isn't", "aren't", "wasn't", "don't", "doesn't"}
 
         for i, token in enumerate(tokens):
-            token_score = 0
+            is_positive = token in self.positive_words
+            is_negative = token in self.negative_words
             
-            # Base point value
-            if token in self.positive_words:
-                token_score = 1
-            elif token in self.negative_words:
-                token_score = -1
-            
-            # If we found a mood word, check the PREVIOUS token to see if it's a negation
-            if token_score != 0 and i > 0 and tokens[i-1] in negation_words:
-                token_score = -token_score # Flip the sign!
+            # Negation handling: flips the boolean flag
+            if (is_positive or is_negative) and i > 0 and tokens[i-1] in negation_words:
+                is_positive, is_negative = is_negative, is_positive
 
-            score += token_score
+            # Tally scores separately
+            if is_positive:
+                pos_score += 1
+            if is_negative:
+                neg_score += 1
 
-        return score
+        return pos_score, neg_score
 
     # ---------------------------------------------------------------------
     # Label prediction
@@ -93,14 +94,17 @@ class MoodAnalyzer:
         """
         Turn the numeric score into a mood label.
         """
-        score = self.score_text(text)
+        pos_score, neg_score = self.score_text(text)
         
-        # Simple threshold mapping
-        if score > 0:
+        # FIX: We can now accurately detect and return "mixed" labels
+        if pos_score > 0 and neg_score > 0:
+            return "mixed"
+        elif pos_score > 0:
             return "positive"
-        elif score < 0:
+        elif neg_score > 0:
             return "negative"
         else:
+            # If both scores are exactly 0, no emotion words were found
             return "neutral"
 
     # ---------------------------------------------------------------------
