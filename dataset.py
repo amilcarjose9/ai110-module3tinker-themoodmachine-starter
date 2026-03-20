@@ -92,3 +92,27 @@ TRUE_LABELS = [
 #
 # Remember to keep them aligned:
 #   len(SAMPLE_POSTS) == len(TRUE_LABELS)
+
+# Adding slang, emojis, sarcasm, and ambiguity
+SAMPLE_POSTS.extend([
+    "Lowkey failing this project but no cap the vibes are immaculate ✨",
+    "I absolutely love it when my computer crashes right before I save my work",
+    "Everything is going according to plan 💀",
+    "Feeling pretty mid today, honestly",
+    "The food was okay I guess, but the service was terrible",
+    "I'm highkey stressed about the exam but also so ready for it to be over",
+    "Best day ever! 🥳🙌",
+    "Just another Monday in paradise... 🙄"
+])
+
+# Matching labels for the new posts
+TRUE_LABELS.extend([
+    "mixed",     # Positive vibes vs. failing project
+    "negative",  # Heavy sarcasm (computer crashing)
+    "negative",  # Sarcasm/Doom (using the skull emoji)
+    "neutral",   # "Mid" implies average/not great but not bad
+    "mixed",     # Neutral food vs. negative service
+    "mixed",     # Stress (neg) vs. ready/anticipation (pos)
+    "positive",  # Purely positive with emojis
+    "negative"   # Sarcastic "paradise" with eye-roll
+])
